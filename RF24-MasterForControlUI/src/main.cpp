@@ -10,12 +10,16 @@
 #include "Config.h"
 #include "RadioModule.h"
 #include "IGameMode.h"
+#include "MasterLedModule.h"
+#include "MasterMatrixModule.h"
 
 
 // --- Global Objects & State ---
 std::map<uint8_t, unsigned long> slave_last_heartbeat;
 std::map<uint8_t, String> id_to_name;
 RadioModule radio;
+MasterLedModule masterLed;
+MasterMatrixModule masterMatrix;
 SystemMode current_mode = MODE_DISCOVERY;
 std::vector<uint8_t> discovered_slaves;
 IGameMode* currentGameMode = nullptr;
@@ -43,8 +47,8 @@ void setup() {
     Serial.begin(115200);
     delay(1000);
     Serial.println("\n------- NRF Master Controller --------");
-    pinMode(LED1_PIN, OUTPUT);
-    pinMode(LED2_PIN, OUTPUT);
+    masterLed.begin();
+    masterMatrix.begin();
     radio.begin(NRF_CE, NRF_CSN);
     randomSeed(analogRead(A0));
     // Defer discovery start by 3 seconds per requirement
@@ -53,6 +57,10 @@ void setup() {
 }
  
 void loop() {
+    // Update RGB LED loop and Matrix display
+    masterLed.update();
+    masterMatrix.update();
+    
     // Start discovery after the scheduled delay
     if (!auto_discovery_started && millis() >= auto_discovery_start_time) {
         Serial.println("Radio switched to Discovery mode.");
@@ -247,8 +255,8 @@ void switchToIdleMode() {
         Serial.printf("Ready for UI commands. %d devices are online.\n", discovered_slaves.size());
         current_mode = MODE_IDLE;
         radio.switchToOperationMode(discovered_slaves);
-        digitalWrite(LED1_PIN, LOW);
-        digitalWrite(LED2_PIN, LOW);
+        masterLed.setIdleMode();
+        masterMatrix.showIdleDisplay();
     }
 }
 void switchToDiscoveryMode() {
@@ -259,6 +267,6 @@ void switchToDiscoveryMode() {
     }
     current_mode = MODE_DISCOVERY;
     radio.switchToDiscoveryMode();
-    digitalWrite(LED1_PIN, HIGH);
-    digitalWrite(LED2_PIN, HIGH);
+    masterLed.startDiscoveryMode();
+    masterMatrix.showWelcomeMessage();
 }
