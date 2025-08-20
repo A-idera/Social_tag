@@ -43,7 +43,8 @@ void setup() {
     Serial.begin(115200);
     delay(1000);
     Serial.println("\n------- NRF Master Controller --------");
-    pinMode(STATUS_LED_PIN, OUTPUT);
+    pinMode(LED1_PIN, OUTPUT);
+    pinMode(LED2_PIN, OUTPUT);
     radio.begin(NRF_CE, NRF_CSN);
     randomSeed(analogRead(A0));
     // Defer discovery start by 10 seconds per requirement
@@ -246,7 +247,8 @@ void switchToIdleMode() {
         Serial.printf("Ready for UI commands. %d devices are online.\n", discovered_slaves.size());
         current_mode = MODE_IDLE;
         radio.switchToOperationMode(discovered_slaves);
-        digitalWrite(STATUS_LED_PIN, LOW);
+        digitalWrite(LED1_PIN, LOW);
+        digitalWrite(LED2_PIN, LOW);
     }
 }
 void switchToDiscoveryMode() {
@@ -257,5 +259,6 @@ void switchToDiscoveryMode() {
     }
     current_mode = MODE_DISCOVERY;
     radio.switchToDiscoveryMode();
-    digitalWrite(STATUS_LED_PIN, HIGH);
+    digitalWrite(LED1_PIN, HIGH);
+    digitalWrite(LED2_PIN, HIGH);
 }
