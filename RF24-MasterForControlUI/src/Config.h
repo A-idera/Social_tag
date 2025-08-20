@@ -10,7 +10,6 @@
 #define LED1_PIN (26)        // LED1用ピン（起動時制約なし）
 #define LED2_PIN (27)        // LED2用ピン
 #define LED_COUNT 7
-#define STATUS_LED_PIN LED1_PIN
 
 // --- マトリックス表示接続ピン ---
 // HSPI（セカンダリSPI）を使用してVSPIとの競合を回避
