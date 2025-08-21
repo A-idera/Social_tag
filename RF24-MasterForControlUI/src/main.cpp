@@ -47,9 +47,9 @@ void setup() {
     pinMode(LED2_PIN, OUTPUT);
     radio.begin(NRF_CE, NRF_CSN);
     randomSeed(analogRead(A0));
-    // Defer discovery start by 10 seconds per requirement
-    Serial.println("[SYSTEM] Entering DISCOVERY mode for 10 seconds...");
-    auto_discovery_start_time = millis() + 10000UL;
+    // Defer discovery start by 3 seconds per requirement
+    Serial.println("[SYSTEM] Entering DISCOVERY mode for 3 seconds...");
+    auto_discovery_start_time = millis() + 3000UL;
 }
  
 void loop() {
