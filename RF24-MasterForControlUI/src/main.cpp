@@ -57,10 +57,6 @@ void setup() {
 }
  
 void loop() {
-    // Update RGB LED loop and Matrix display
-    masterLed.update();
-    masterMatrix.update();
-    
     // Start discovery after the scheduled delay
     if (!auto_discovery_started && millis() >= auto_discovery_start_time) {
         Serial.println("Radio switched to Discovery mode.");
@@ -94,6 +90,9 @@ void loop() {
  
     switch (current_mode) {
         case MODE_DISCOVERY:
+            // Update RGB LED loop and Matrix display only in discovery mode
+            masterLed.update();
+            masterMatrix.update();
             handleDiscoveryState();
             break;
         case MODE_GAME_RUNNING:
